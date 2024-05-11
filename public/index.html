@@ -170,13 +170,13 @@
   };
 
   const editUsuario = async (id) => {
-    const name = $("#nombreEdit").val();
+    const nombre = $("#nombreEdit").val();
     const balance = $("#balanceEdit").val();
     try {
       const { data } = await axios.put(
         `http://localhost:3000/usuario?id=${id}`,
         {
-          name,
+          nombre,
           balance,
         }
       );

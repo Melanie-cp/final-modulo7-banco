@@ -30,6 +30,29 @@ app.post('/usuario', async (req, res) => {
     }
 })
 
+app.delete('/usuario', async (req, res) => {
+    try {
+        const { id } = req.query
+        const usuario = await Usuarios.remove(id)
+        return res.json(usuario)
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json(error)
+    }
+})
+
+app.put('/usuario', async (req, res) => {
+    try {
+        const { id } = req.query
+        const { nombre, balance } = req.body
+        const usuario = await Usuarios.update({ id, nombre, balance })
+        return res.json(usuario)
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json(error)
+    }
+})
+
 const PORT = process.env.PORT || 3000
 app.listen(PORT, () => {
     console.log(`Servidor encendido http://localhost:${PORT}`)

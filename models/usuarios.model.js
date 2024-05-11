@@ -15,7 +15,35 @@ const create = async ({ nombre, balance }) => {
     return rows[0]
 }
 
+const remove = async (id) => {
+    const query = {
+        text: `
+        DELETE FROM USUARIOS WHERE ID = $1
+        RETURNING *
+        `,
+        values: [id]
+    }
+    const { rows } = await pool.query(query)
+    return rows[0]
+}
+
+const update = async ({ id, nombre, balance }) => {
+    const query = {
+        text: `UPDATE USUARIOS SET
+        NOMBRE = $2,
+        BALANCE = $3
+        WHERE ID = $1
+        RETURNING *
+        `,
+        values: [id, nombre, balance]
+    }
+    const { rows } = await pool.query(query)
+    return rows[0]
+}
+
 export const Usuarios = {
     findAll,
-    create
+    create,
+    remove,
+    update
 }
