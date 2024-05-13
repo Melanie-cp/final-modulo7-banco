@@ -1,5 +1,6 @@
 import express from 'express'
 import { Usuarios } from './models/usuarios.model.js'
+import { Transferencias } from './models/transfer.model.js'
 
 const app = express()
 
@@ -19,7 +20,7 @@ app.get('/usuarios', async (req, res) => {
     }
 })
 
-app.post('/usuario', async (req, res) => {
+app.post('/usuarios', async (req, res) => {
     try {
         const { nombre, balance } = req.body
         const usuario = await Usuarios.create({ nombre, balance })
@@ -30,7 +31,7 @@ app.post('/usuario', async (req, res) => {
     }
 })
 
-app.delete('/usuario', async (req, res) => {
+app.delete('/usuarios', async (req, res) => {
     try {
         const { id } = req.query
         const usuario = await Usuarios.remove(id)
@@ -41,12 +42,33 @@ app.delete('/usuario', async (req, res) => {
     }
 })
 
-app.put('/usuario', async (req, res) => {
+app.put('/usuarios', async (req, res) => {
     try {
         const { id } = req.query
         const { nombre, balance } = req.body
         const usuario = await Usuarios.update({ id, nombre, balance })
         return res.json(usuario)
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json(error)
+    }
+})
+
+app.get('/transferencias', async (req, res) => {
+    try {
+        const transferencias = await Transferencias.findAll()
+        return res.json(transferencias)
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json(error)
+    }
+})
+
+app.post('/transferencias', async (req, res) => {
+    try {
+        const { emisor, receptor, monto } = req.body
+        const transferencias = await Transferencias.create(emisor, receptor, monto)
+        return res.json(transferencias)
     } catch (error) {
         console.log(error)
         return res.status(500).json(error)

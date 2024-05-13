@@ -174,7 +174,7 @@
     const balance = $("#balanceEdit").val();
     try {
       const { data } = await axios.put(
-        `http://localhost:3000/usuario?id=${id}`,
+        `http://localhost:3000/usuarios?id=${id}`,
         {
           nombre,
           balance,
@@ -192,7 +192,7 @@
     let nombre = $("form:first input:first").val();
     let balance = Number($("form:first input:nth-child(2)").val());
     try {
-      const response = await fetch("http://localhost:3000/usuario", {
+      const response = await fetch("http://localhost:3000/usuarios", {
         method: "post",
         headers: {
           "Content-Type": "application/json",
@@ -220,7 +220,7 @@
       return false;
     }
     try {
-      const response = await fetch("http://localhost:3000/transferencia", {
+      const response = await fetch("http://localhost:3000/transferencias", {
         method: "post",
         headers: {
           "Content-Type": "application/json",
@@ -262,13 +262,13 @@
               </tr>
          `);
 
-      $("#emisor").append(`<option value="${c.nombre}">${c.nombre}</option>`);
-      $("#receptor").append(`<option value="${c.nombre}">${c.nombre}</option>`);
+      $("#emisor").append(`<option value="${c.id}">${c.nombre}</option>`);
+      $("#receptor").append(`<option value="${c.id}">${c.nombre}</option>`);
     });
   };
 
   const eliminarUsuario = async (id) => {
-    const response = await fetch(`http://localhost:3000/usuario?id=${id}`, {
+    const response = await fetch(`http://localhost:3000/usuarios?id=${id}`, {
       method: "DELETE",
     });
     getUsuarios();
@@ -280,11 +280,11 @@
 
     data.forEach((t) => {
       $(".transferencias").append(`
-       <tr>
-         <td> ${formatDate(t[4])} </td>
-         <td> ${t[1]} </td>
-         <td> ${t[2]} </td>
-         <td> ${t[3]} </td>
+      <tr>
+         <td> ${formatDate(t.fecha)} </td>
+         <td> ${t.nombre_emisor} </td>
+         <td> ${t.nombre_receptor} </td>
+         <td> ${t.monto} </td>
        </tr>
      `);
     });
