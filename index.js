@@ -1,6 +1,6 @@
 import express from 'express'
-import { Usuarios } from './models/usuarios.model.js'
-import { Transferencias } from './models/transfer.model.js'
+import usuariosRoutes from './routes/usuarios.route.js'
+import transferRoutes from './routes/transfer.route.js'
 
 const app = express()
 
@@ -10,70 +10,9 @@ app.use(express.static(__dirname + '/public'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-app.get('/usuarios', async (req, res) => {
-    try {
-        const usuarios = await Usuarios.findAll()
-        return res.json(usuarios)
-    } catch (error) {
-        console.log(error)
-        return res.status(500).json(error)
-    }
-})
+app.use('/usuarios', usuariosRoutes)
 
-app.post('/usuarios', async (req, res) => {
-    try {
-        const { nombre, balance } = req.body
-        const usuario = await Usuarios.create({ nombre, balance })
-        return res.json(usuario)
-    } catch (error) {
-        console.log(error)
-        return res.status(500).json(error)
-    }
-})
-
-app.delete('/usuarios', async (req, res) => {
-    try {
-        const { id } = req.query
-        const usuario = await Usuarios.remove(id)
-        return res.json(usuario)
-    } catch (error) {
-        console.log(error)
-        return res.status(500).json(error)
-    }
-})
-
-app.put('/usuarios', async (req, res) => {
-    try {
-        const { id } = req.query
-        const { nombre, balance } = req.body
-        const usuario = await Usuarios.update({ id, nombre, balance })
-        return res.json(usuario)
-    } catch (error) {
-        console.log(error)
-        return res.status(500).json(error)
-    }
-})
-
-app.get('/transferencias', async (req, res) => {
-    try {
-        const transferencias = await Transferencias.findAll()
-        return res.json(transferencias)
-    } catch (error) {
-        console.log(error)
-        return res.status(500).json(error)
-    }
-})
-
-app.post('/transferencias', async (req, res) => {
-    try {
-        const { emisor, receptor, monto } = req.body
-        const transferencias = await Transferencias.create(emisor, receptor, monto)
-        return res.json(transferencias)
-    } catch (error) {
-        console.log(error)
-        return res.status(500).json(error)
-    }
-})
+app.use('/transferencias', transferRoutes)
 
 const PORT = process.env.PORT || 3000
 app.listen(PORT, () => {
